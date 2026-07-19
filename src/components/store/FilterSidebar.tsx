@@ -2,8 +2,6 @@
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/Accordion'
-import { Button } from '@/components/ui/Button'
-import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const filters = {
