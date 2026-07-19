@@ -11,8 +11,7 @@ interface ProductPageProps {
 }
 
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const p = await params;
-  const product = DUMMY_PRODUCTS.find((p_ind) => p_ind.slug === p.slug)
+  const product = DUMMY_PRODUCTS.find((p_ind) => p_ind.slug === params.slug)
   if (!product) return { title: 'Produk Tidak Ditemukan' }
 
   return {
@@ -22,16 +21,18 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const p = await params;
-  const product = DUMMY_PRODUCTS.find((prod) => prod.slug === p.slug)
+  const product = DUMMY_PRODUCTS.find((prod) => prod.slug === params.slug)
 
   if (!product) {
     notFound()
   }
 
+  // TypeScript guard - notFound() throws, so we can safely assert non-null
+  const safeProduct = product!
+
   // Simulate related products
   const relatedProducts = DUMMY_PRODUCTS.filter(
-    (prod) => prod.categorySlug === product.categorySlug && prod.id !== product.id
+    (prod) => prod.categorySlug === safeProduct.categorySlug && prod.id !== safeProduct.id
   ).slice(0, 4)
 
   return (
@@ -40,12 +41,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
         items={[
           { label: 'Home', href: '/' },
           { label: 'Koleksi', href: '/products' },
-          { label: product.name },
+          { label: safeProduct.name },
         ]}
         className="mb-8"
       />
 
-      <ProductDetail product={product} relatedProducts={relatedProducts} />
+      <ProductDetail product={safeProduct} relatedProducts={relatedProducts} />
     </div>
   )
 }
