@@ -22,10 +22,8 @@ interface ProductsPageProps {
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  // Await search params in next 14/15 to ensure dynamic rendering if needed
-  const params = await searchParams;
-  const q = params.q || ''
-  const category = params.category || 'Semua Produk'
+  const q = searchParams.q || ''
+  const category = searchParams.category || 'Semua Produk'
 
   return (
     <div className="container-raxie py-8 md:py-12">
@@ -35,7 +33,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
           items={[
             { label: 'Home', href: '/' },
             { label: 'Koleksi', href: '/products' },
-            ...(params.category ? [{ label: params.category, href: `/products?category=${params.category}` }] : []),
+            ...(searchParams.category ? [{ label: searchParams.category, href: `/products?category=${searchParams.category}` }] : []),
           ]}
         />
         <div className="mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -58,9 +56,8 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
 
         {/* Main Content */}
         <div className="flex-1 w-full">
-          {/* Mobile Filter Toggle & Sort Dropdown usually go here, inside ProductGrid header */}
           <Suspense fallback={<ProductGridSkeleton count={12} />}>
-            <ProductGrid searchParams={params} />
+            <ProductGrid searchParams={searchParams} />
           </Suspense>
         </div>
       </div>
